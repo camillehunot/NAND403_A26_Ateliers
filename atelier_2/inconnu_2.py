@@ -24,6 +24,14 @@ les données…
 
 import sys
 import json #librairy built in 
+from PySide6.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QTableWidget,
+    QTableWidgetItem
+
+)
+
 
 json_file = sys.argv[1]
 print("JSON FILE >>>" + json_file) #on recup le path ici, il est copié dans le launch.json dans argv
@@ -84,3 +92,24 @@ for i in data:
     for e in i.items():
          print(f"     - {e}")
     print("\n")
+
+
+app = QApplication([])#doit etre avant un QWidget
+
+tableau = QTableWidget()
+tableau.setRowCount(len(data))
+tableau.setColumnCount(3)
+tableau.setHorizontalHeaderLabels(["name", "price", "type"])
+
+#fill the form
+for i in range(len(data)):
+    item = data[i]
+    tableau.setItem(i, 0, QTableWidgetItem(item["name"]))
+    tableau.setItem(i, 1, QTableWidgetItem(item["price"]))
+    tableau.setItem(i, 2, QTableWidgetItem(item["type"]))
+
+
+window = QMainWindow();
+window.setCentralWidget(tableau)
+window.show()
+sys.exit(app.exec())
