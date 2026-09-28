@@ -1,3 +1,2 @@
-.vscode/**
-
-#permet d'ignorer ce qui se trouve dans 
+.vscode/** 
+.venv/**
