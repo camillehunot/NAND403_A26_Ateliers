@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout,QTextEdit, QPushButton, QMessageBox
+from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout,QTextEdit, QPushButton, QMessageBox, QApplication
  
 class MessageBoard(QWidget): #definition de la classe
     def __init__(self): #constructeur self équivalent de this du cpp, le constructeur dans python prend self en paramètre
@@ -9,13 +9,14 @@ class MessageBoard(QWidget): #definition de la classe
     #definir une fonction
     def create_ui(self): #premier parametre toujours self dans les class
         print("create ui")
+        app = QApplication.instance() #permet de récupérer l'instance de l'application
         layout = QVBoxLayout(self)   #container
         title = QLabel("Message board")
         layout.addWidget(title) #permet de ranger le title dans le layout
 
         # QTextEdit
-        texte = QTextEdit(self) 
-        layout.addWidget(texte)
+        self.texte = QTextEdit(self) 
+        layout.addWidget(self.texte) #ajouter le QTextEdit dans le layout
  
         # QPushButton
         
@@ -23,12 +24,23 @@ class MessageBoard(QWidget): #definition de la classe
         layout.addWidget(button)
         button.clicked.connect(self.on_click) #permet de connecter le bouton a un évenement, ici c'est activer la fonction on_click
         
-        
+    def read_text(self):
+        text = self.texte.toPlainText() #.toplaintext permet de récupérer le texte du QTextEdit sans les balises html
+        print(text)
+        return text
+
     def on_click(self):
         print("on click called")
-        QMessageBox.information(self, )
-        
-        # QMessageBox
+        text = self.read_text()
+        if text.strip() == "":
+            QMessageBox.warning(self, "Attention", "Le champ de texte est vide !")
+        else:
+            QMessageBox.information(self, "Lecture du message", f"Message :\n\n{text}")
+
+            #self, titre de la boite, message
+       
+
+    
 
         
 
@@ -36,6 +48,7 @@ class MessageBoard(QWidget): #definition de la classe
  
 def main(): #definition fonction main
     global widget #global permet que la variable widget est accessible partout, permet de garder la variable pour plus tard
+
     try: #permet de pas les accumuler plus d'une fois
         widget.close()
     except Exception:
