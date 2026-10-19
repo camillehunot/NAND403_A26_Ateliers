@@ -1,0 +1,180 @@
+import random
+from maya import cmds
+from PySide6.QtWidgets import (
+    QFormLayout,
+    QGridLayout,
+    QLabel,
+    QSpinBox,
+    QDoubleSpinBox,
+    QWidget,
+    QPushButton,
+    QVBoxLayout,
+    
+)
+
+# pop up choix des paramètres : 
+# largeur et hauteur de la barre verticale
+# nbr, epaisseur longueur des barres horizontales
+
+
+class FenceGenerator(QWidget):
+    
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Atelier 6")
+        self.setMinimumWidth(400)
+        self.build_ui()
+    
+    def build_ui(self):
+        layout = QVBoxLayout(self)
+        layout_horizontal_segment = QFormLayout()
+        layout.addLayout(layout_horizontal_segment)
+
+        # choix du nombre de barre horizon
+        self.segment_number = QSpinBox()
+        self.segment_number.setRange(1, 100) 
+        layout_horizontal_segment.addRow("numbers of segment :", self.segment_number)
+
+        grid_H = QGridLayout()
+        grid_V = QGridLayout()
+
+        
+        layout_horizontal = QFormLayout()
+
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+        title_V = QLabel(" -----------  Vertical Bar Parameters  ----------- ")
+        layout.addWidget(title_V) 
+        layout.addLayout(layout_horizontal)
+        layout.addLayout(grid_V)
+
+            # choix pour les valeurs de paramètres en float
+        self.numberV = QDoubleSpinBox()
+        self.numberV.setRange(0, 100)  
+        self.numberV.setValue(1)      # Valeur par défaut
+        self.numberV.setDecimals(2) #determiner le nombre de chiffre après la virgule que l'on veut afficher dans le QDoubleSpinBox
+        
+        parameters_V = ["Height :", "Thickness :"]
+        self.grid_V_values = {} #initialiser un dictionnaire pour garder les chiffres des paramètres
+                
+            # grid.addWidget(QLabel("<b> Horizontal bar = H , Main pilar = V </b>"), 0, 0)
+               
+        
+        for i, category in enumerate(parameters_V): # -1 car je règle le scale à la fin pour ne pas avoir de problème avec les valeurs min et max
+            grid_V.addWidget(QLabel(category), i + 0, 0)
+            number_v = QDoubleSpinBox()
+            number_v.setRange(0, 100) #ajouter un range sinon ca me bloquait a deux chiffres
+            number_v.setValue(1)
+            grid_V.addWidget( number_v, i + 0, 1) # permet de mettre l'input min  dans la grille a la ligne i+1 et la colonne 2
+    
+            self.grid_V_values[parameters_V[i]] = {"number_v": number_v} 
+
+
+
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+        title_h = QLabel(" -----------  Horizontal Bar Parameters  ----------- ")
+        layout.addWidget(title_h) 
+        layout.addLayout(layout_horizontal)
+        layout.addLayout(grid_H)
+
+
+
+        # choix du nombre de barre horizon
+        self.object_number = QSpinBox()
+        self.object_number.setRange(1, 100) 
+        layout_horizontal.addRow("numbers of horizontal bar :", self.object_number)
+
+
+        # choix pour les valeurs de paramètres en float
+        self.numberH = QDoubleSpinBox()
+        self.numberH.setRange(0, 100)  
+        self.numberH.setValue(1)      # Valeur par défaut
+        self.numberH.setDecimals(2) #determiner le nombre de chiffre après la virgule que l'on veut afficher dans le QDoubleSpinBox
+
+        parameters_H = ["Lenght :", "Thickness :"]
+        self.grid_H_values = {} #initialiser un dictionnaire pour garder les chiffres des paramètres
+        
+    # grid.addWidget(QLabel("<b> Horizontal bar = H , Main pilar = V </b>"), 0, 0)
+       
+
+        for i, category in enumerate(parameters_H): # -1 car je règle le scale à la fin pour ne pas avoir de problème avec les valeurs min et max
+                    grid_H.addWidget(QLabel(category), i + 0, 0)
+                    number_H = QDoubleSpinBox()
+                    number_H.setRange(0, 100) #ajouter un range sinon ca me bloquait a deux chiffres
+                    number_H.setValue(1)
+                    grid_H.addWidget(number_H, i + 0, 1) # permet de mettre l'input min  dans la grille a la ligne i+1 et la colonne 2
+        
+        
+                    self.grid_H_values[parameters_H[i]] = {"number_H": number_H} 
+
+
+        
+        self.create_button = QPushButton("Create")
+        self.create_button.clicked.connect(self.create_object)
+        layout.addWidget(self.create_button)
+
+
+    def create_object(self):
+
+            
+        number_of_part = self.segment_number()
+        number_of_v_bar = self.object_number()
+
+        vertical_lenght = self.grid__values["Height :"].value()
+        vertical_thickness = self.grid_H_values["Thickness :"].value()
+
+        horizontal_lenght = self.grid__values["Lenght :"].value()
+        horizontal_thickness = self.grid_H_values["Thickness :"].value()
+
+        bar_vertical_position = ((vertical_lenght - (horizontal_thickness*number_of_v_bar))/number_of_v_bar)
+
+
+        #créer le segment
+        
+        
+        for i in range(number_of_part):
+            object_V = cmds.polyCube[0]
+            bar_v_distance = (vertical_thickness + horizontal_lenght)*(i-1)
+            cmds.scale(vertical_thickness, vertical_lenght, vertical_thickness, object_V)
+            cmds.move(bar_v_distance, 0, 0)
+            for i in range(number_of_v_bar):
+                 object_H = cmds.polyCube[0]
+
+
+
+
+
+
+        #créer la répétition
+        
+
+
+
+
+# créer la barre verticale
+
+# créer 2 ou plusieurs barres horizontales
+
+# for loop
+
+
+
+
+
+
+
+
+
+def main():
+    global tool_window
+    try:
+        tool_window.close()
+    except Exception:
+        pass
+
+    tool_window = FenceGenerator()
+    tool_window.show()
+
+main()
