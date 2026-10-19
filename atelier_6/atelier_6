@@ -12,10 +12,6 @@ from PySide6.QtWidgets import (
     
 )
 
-# pop up choix des paramètres : 
-# largeur et hauteur de la barre verticale
-# nbr, epaisseur longueur des barres horizontales
-
 
 class FenceGenerator(QWidget):
     
@@ -40,6 +36,7 @@ class FenceGenerator(QWidget):
 
         
         layout_horizontal = QFormLayout()
+        layout.addLayout(layout_horizontal)
 
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -103,11 +100,11 @@ class FenceGenerator(QWidget):
                     grid_H.addWidget(QLabel(category), i + 0, 0)
                     number_H = QDoubleSpinBox()
                     number_H.setRange(0, 100) #ajouter un range sinon ca me bloquait a deux chiffres
-                    number_H.setValue(1)
+                    number_H.setValue(0.2)
                     grid_H.addWidget(number_H, i + 0, 1) # permet de mettre l'input min  dans la grille a la ligne i+1 et la colonne 2
         
         
-                    self.grid_H_values[parameters_H[i]] = {"number_H": number_H} 
+                    self.grid_H_values[parameters_H[i]] = {"number_h": number_H} 
 
 
         
@@ -119,49 +116,34 @@ class FenceGenerator(QWidget):
     def create_object(self):
 
             
-        number_of_part = self.segment_number()
-        number_of_v_bar = self.object_number()
+        number_of_part = self.segment_number.value()
+        number_of_v_bar = self.object_number.value()
 
-        vertical_lenght = self.grid__values["Height :"].value()
-        vertical_thickness = self.grid_H_values["Thickness :"].value()
+        vertical_height = self.grid_V_values["Height :"]["number_v"].value()
+        vertical_thickness = self.grid_V_values["Thickness :"]["number_v"].value()
 
-        horizontal_lenght = self.grid__values["Lenght :"].value()
-        horizontal_thickness = self.grid_H_values["Thickness :"].value()
+        horizontal_lenght = self.grid_H_values["Lenght :"]["number_h"].value()
+        horizontal_thickness = self.grid_H_values["Thickness :"]["number_h"].value()
 
-        bar_vertical_position = ((vertical_lenght - (horizontal_thickness*number_of_v_bar))/number_of_v_bar)
+        bar_vertical_position = ((vertical_height - (horizontal_thickness*number_of_v_bar))/number_of_v_bar) 
 
 
-        #créer le segment
+        
         
         
         for i in range(number_of_part):
-            object_V = cmds.polyCube[0]
+
+            object_V = cmds.polyCube()[0]
             bar_v_distance = (vertical_thickness + horizontal_lenght)*(i-1)
-            cmds.scale(vertical_thickness, vertical_lenght, vertical_thickness, object_V)
-            cmds.move(bar_v_distance, 0, 0)
-            for i in range(number_of_v_bar):
-                 object_H = cmds.polyCube[0]
+            cmds.scale(vertical_thickness, vertical_height, vertical_thickness, object_V)
+            cmds.move(((vertical_thickness/2)+ ((vertical_thickness + horizontal_lenght)*(i-1))), (vertical_height/2), 0, object_V)
 
+            for n in range(number_of_v_bar):
+                object_H = cmds.polyCube()[0]
+                bar_h_h_distance = horizontal_lenght/2 + vertical_thickness +(((vertical_thickness) + horizontal_lenght)*(i-1))
 
-
-
-
-
-        #créer la répétition
-        
-
-
-
-
-# créer la barre verticale
-
-# créer 2 ou plusieurs barres horizontales
-
-# for loop
-
-
-
-
+                cmds.scale(horizontal_lenght, horizontal_thickness , horizontal_thickness, object_H)
+                cmds.move(bar_h_h_distance, (vertical_height - vertical_thickness) - ((bar_vertical_position)* n) + horizontal_thickness, 0, object_H)
 
 
 
