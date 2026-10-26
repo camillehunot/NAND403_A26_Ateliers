@@ -1,5 +1,6 @@
 import maya.cmds as cmds 
 import sys
+cmds.playbackOptions(0, 100)
 item_selected = cmds.ls(selection=True)
 horse = item_selected
 def clean_key():
