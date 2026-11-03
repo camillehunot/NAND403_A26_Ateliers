@@ -1,0 +1,23 @@
+Merci d'avoir téléchargé le script python de génération de basic shape aléatoire.
+Voici les étapes pour l'installer dans votre programme.
+
+Étapes : Importation du script
+
+1) Dans la section des shelf maya, cliquer sur l'icone de roue dentées
+2) Cliquer "New shelf"
+3) Nommer le scripts ou un nom qui représente le shelf selon vous.
+4) Dans l'onglet "Windows" -> general editor -> Scripts Editor
+5) Dans scripts Editor, assurer vous d'être dans l'onglet Python
+6) coller le script dans la zone de texte du bas.
+7) sélectionner l'ensemble du script et le drag and drop dans votre espace de shelf
+
+Étapes : Associer une icone 
+
+1) Clic droit sur l'icone générique associé a votre script dans votre shelf 
+	-> Edit
+2) Dans le shelf editor aller dans l'onglet Shelves
+3) Trouver "Icon name" et cliquer sur l'icone de dossier.
+4) récupérer le path de ce dossier et y accéder dans votre explorateur de fichier.
+5) glisser le png de l'icone dans ce dossier.
+6) retourner dans le Shelf editor et dans Icon name icon dossier et sélectionner le png que vous venez d'ajouter.
+7) Cliquer sur le bouton "Save All Shelves"
