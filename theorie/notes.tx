@@ -1,0 +1,19 @@
+
+
+ABSOLUTE PATH VS RELATIF PATH
+
+Absolute :
+
+
+Relatif :
+root\first_folder\ B.py
+root\second_folder\ A.py
+
+si je veux avoir accès a B.py, mais je suis dans A.py
+
+root\second_folder > cd .. (l point = l'endroit ou on est, l'autre c'est de combien on remonte)
+cela nous mène a root, maintenant on doit entrer dans first_folder :
+donc la ligne ressemble a cela :
+root/second_folder > cd ..\ first_folder
+
+maximum deux points donc si on veut remonter avec path relatif plus loins on fait ..\..\..\ ici on remonterait de 3
